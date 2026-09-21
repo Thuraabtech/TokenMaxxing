@@ -1,0 +1,11 @@
+FrugalGPT (Chen, Zaharia, Zou, 2023) proposes three strategies for cutting LLM
+inference cost: prompt adaptation (shrinking or rewriting prompts), LLM
+approximation (using a cheaper proxy model), and LLM cascades. The cascade
+approach sequentially queries models from cheapest to most expensive, using
+each model's own confidence score to decide whether to accept its answer or
+escalate to the next tier. On benchmark tasks, FrugalGPT matches GPT-4-level
+accuracy for as little as 2% of GPT-4's cost, and can also exceed GPT-4's
+accuracy by about 4% at the same total cost by combining multiple cheaper
+models. The key insight is that most queries are easy enough for a small
+model to answer correctly and confidently -- only genuinely hard queries need
+to reach the expensive tier at all.

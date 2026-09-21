@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TokenMaxxer — spend less, think just as hard</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="site-nav">
+    <div class="wordmark"><span class="coin coin-sm" aria-hidden="true"></span>TokenMaxxer</div>
+    <nav>
+      <a href="#app">Chat</a>
+      <a href="#about">About</a>
+    </nav>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color theme">
+      <span class="track"><span class="thumb"></span></span>
+    </button>
+  </header>
+
+  <section class="hero">
+    <p class="eyebrow">Complexity-routed chat</p>
+    <h1>Most questions don't need the expensive model.</h1>
+    <p class="hero-sub">TokenMaxxer reads what you're asking, grades how hard it really is, and only spends on Gold-tier reasoning when a question actually earns it.</p>
+  </section>
+
+  <main class="app" id="app">
+    <section class="chat-pane">
+      <div class="messages" id="messages">
+        <div class="empty-state" id="empty-state">
+          <span class="coin coin-lg" aria-hidden="true"></span>
+          <p class="empty-title">Ask something below — each part of your question is routed and priced on its own.</p>
+          <div class="suggestion-chips">
+            <button type="button" class="chip" data-prompt="What's 340 × 12? Also give me a two-sentence summary of what TOON is.">A mixed-difficulty question</button>
+            <button type="button" class="chip" data-prompt="What's the capital of France?">Something simple</button>
+            <button type="button" class="chip" data-prompt="Design a caching strategy for a high-traffic recommendation API.">Something hard</button>
+          </div>
+        </div>
+      </div>
+      <form class="composer" id="composer">
+        <textarea id="input" placeholder="Ask TokenMaxxer something…" rows="1"></textarea>
+        <button type="submit" id="send">
+          <span>Send</span>
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1.5 8L14.5 1.5L9.5 14.5L7 9L1.5 8Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </button>
+      </form>
+    </section>
+
+    <aside class="vault" aria-label="Savings vault">
+      <div class="vault-card">
+        <p class="vault-label">Saved this session</p>
+        <div class="vault-figure">
+          <span class="coin coin-lg" aria-hidden="true"></span>
+          <span class="vault-amount mono" id="vault-amount">$0.000000</span>
+        </div>
+        <p class="vault-caption" id="vault-caption">vs. always calling the Gold-tier model</p>
+      </div>
+
+      <div class="vault-section">
+        <h2>Calls by tier</h2>
+        <div id="tier-bars"></div>
+      </div>
+
+      <div class="vault-section">
+        <h2>Last message</h2>
+        <div id="last-request" class="empty-note">No messages yet.</div>
+      </div>
+    </aside>
+  </main>
+
+  <section class="about" id="about">
+    <p class="eyebrow">How it works</p>
+    <h2>Three tiers, minted for the job at hand</h2>
+    <p class="about-lede">Every message gets split into as many of these as it actually needs — most are just one.</p>
+
+    <div class="tier-cards">
+      <div class="tier-card copper">
+        <span class="coin coin-md" aria-hidden="true"></span>
+        <h3>Copper</h3>
+        <p class="tier-desc">Quick facts, formatting, simple lookups — anything a fast, inexpensive model can nail on the first try.</p>
+        <p class="tier-power mono">Lightweight model</p>
+      </div>
+      <div class="tier-card silver">
+        <span class="coin coin-md" aria-hidden="true"></span>
+        <h3>Silver</h3>
+        <p class="tier-desc">Everyday reasoning, summarizing, and questions with a bit of nuance — the middle ground for most real work.</p>
+        <p class="tier-power mono">Balanced mid-tier model</p>
+      </div>
+      <div class="tier-card gold">
+        <span class="coin coin-md" aria-hidden="true"></span>
+        <h3>Gold</h3>
+        <p class="tier-desc">Genuinely hard, open-ended, or high-stakes questions — the ones actually worth the frontier-class price tag.</p>
+        <p class="tier-power mono">Frontier-class model</p>
+      </div>
+    </div>
+
+    <p class="about-note">If a cheaper tier isn't confident in its own answer, it escalates itself up a tier automatically — you never have to ask twice.</p>
+  </section>
+
+  <footer class="site-footer">
+    <p>TokenMaxxer — built to spend less on more.</p>
+    <p class="mono small">Powered by LangGraph, FAISS, and Amazon Bedrock. Session totals reset when the server restarts.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

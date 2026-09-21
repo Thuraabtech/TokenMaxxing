@@ -1,0 +1,11 @@
+TOON (Token-Oriented Object Notation) is a compact serialization format
+designed for passing structured data to LLMs with fewer tokens than JSON.
+It combines YAML-style indentation for structure with CSV-style rows for
+uniform arrays, dropping the repeated brackets, quotes, and keys that JSON
+requires for every element. Published benchmarks report 30-60% fewer tokens
+than equivalent JSON on uniform, tabular data such as lists of records with
+the same fields. TOON's documentation is explicit that this sweet spot is
+uniform, same-shape data -- retrieved search results, rows of a table, a
+list of routing decisions -- and that deeply nested or irregular data is
+usually still better represented in plain JSON. TOON is lossless and
+round-trips cleanly back to JSON.

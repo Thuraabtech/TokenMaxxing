@@ -1,0 +1,11 @@
+RouteLLM (Ong et al., 2024) trains a lightweight router model that decides,
+for each incoming query, whether to send it to a strong (expensive) or weak
+(cheap) LLM. Instead of calling an LLM to make that routing decision, RouteLLM
+trains the router on human preference data -- pairs of responses where humans
+judged which model's answer was better -- so at inference time the router is
+a small, fast classifier, not another expensive model call. Evaluated on
+public benchmarks, RouteLLM's routers cut costs by more than 2x in some
+settings while keeping response quality close to always using the strong
+model. The practical lesson for building a routing system: the routing
+decision itself should be nearly free, or you've just moved the cost problem
+one step earlier in the pipeline instead of solving it.
