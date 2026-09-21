@@ -8,7 +8,7 @@ where TOON actually helps, budget breakdown).
 
 ## Demo
 
-<video src="brag-output/brag.mp4" controls muted poster="brag-output/brag.jpg" width="100%"></video>
+[![Demo](brag-output/brag.jpg)](brag-output/brag.mp4)
 
 ## Stack
 
