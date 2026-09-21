@@ -25,12 +25,12 @@
 
   <section class="hero">
     <p class="eyebrow">Complexity-routed chat</p>
-    <h1>Most questions don't need the expensive model.</h1>
+    <h1>Most questions don't need the <span class="grad-text">expensive model</span>.</h1>
     <p class="hero-sub">TokenMaxxer reads what you're asking, grades how hard it really is, and only spends on Gold-tier reasoning when a question actually earns it.</p>
   </section>
 
   <main class="app" id="app">
-    <section class="chat-pane">
+    <section class="chat-pane reveal">
       <div class="messages" id="messages">
         <div class="empty-state" id="empty-state">
           <span class="coin coin-lg" aria-hidden="true"></span>
@@ -52,7 +52,7 @@
     </section>
 
     <aside class="vault" aria-label="Savings vault">
-      <div class="vault-card">
+      <div class="vault-card reveal">
         <p class="vault-label">Saved this session</p>
         <div class="vault-figure">
           <span class="coin coin-lg" aria-hidden="true"></span>
@@ -61,12 +61,12 @@
         <p class="vault-caption" id="vault-caption">vs. always calling the Gold-tier model</p>
       </div>
 
-      <div class="vault-section">
+      <div class="vault-section reveal">
         <h2>Calls by tier</h2>
         <div id="tier-bars"></div>
       </div>
 
-      <div class="vault-section">
+      <div class="vault-section reveal">
         <h2>Last message</h2>
         <div id="last-request" class="empty-note">No messages yet.</div>
       </div>

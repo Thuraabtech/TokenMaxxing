@@ -5,6 +5,7 @@ const sendBtn = document.getElementById("send");
 const vaultAmountEl = document.getElementById("vault-amount");
 const vaultCardEl = document.querySelector(".vault-card");
 const vaultCoinEl = document.querySelector(".vault-figure .coin");
+const vaultFigureEl = document.querySelector(".vault-figure");
 
 const TIER_LABELS = { low: "copper", medium: "silver", high: "gold" };
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -91,6 +92,21 @@ function renderSubtaskStrip(container, subtasks, totalSaved) {
   }
 }
 
+function spawnSparkles(container, count = 8) {
+  if (reduceMotion || !container) return;
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement("span");
+    s.className = "spark";
+    const angle = (Math.PI * 2 * i) / count + Math.random() * 0.5;
+    const dist = 30 + Math.random() * 24;
+    s.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
+    s.style.setProperty("--dy", `${Math.sin(angle) * dist}px`);
+    s.style.animationDelay = `${Math.random() * 0.1}s`;
+    container.appendChild(s);
+    setTimeout(() => s.remove(), 1000);
+  }
+}
+
 function animateVaultTo(target) {
   if (reduceMotion) {
     displayedSaved = target;
@@ -119,6 +135,7 @@ function animateVaultTo(target) {
   vaultCardEl.classList.add("pulse");
   setTimeout(() => vaultCoinEl.classList.remove("drop"), 400);
   setTimeout(() => vaultCardEl.classList.remove("pulse"), 900);
+  if (delta > 0) spawnSparkles(vaultFigureEl);
 }
 
 function updateTierBars(tierCalls) {
@@ -226,5 +243,45 @@ themeToggle.addEventListener("click", () => {
   document.documentElement.setAttribute("data-theme", next);
   localStorage.setItem("tokenmaxxer-theme", next);
 });
+
+// --- tier card 3D tilt + glare ---
+if (!reduceMotion && window.matchMedia("(pointer: fine)").matches) {
+  document.querySelectorAll(".tier-card").forEach((card) => {
+    card.addEventListener("mousemove", (e) => {
+      const rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      const rx = (0.5 - py) * 10;
+      const ry = (px - 0.5) * 10;
+      card.style.setProperty("--rx", `${rx}deg`);
+      card.style.setProperty("--ry", `${ry}deg`);
+      card.style.setProperty("--mx", `${px * 100}%`);
+      card.style.setProperty("--my", `${py * 100}%`);
+    });
+    card.addEventListener("mouseleave", () => {
+      card.style.setProperty("--rx", "0deg");
+      card.style.setProperty("--ry", "0deg");
+    });
+  });
+}
+
+// --- scroll-reveal entrances ---
+const revealEls = document.querySelectorAll(".reveal, .tier-card");
+if (reduceMotion) {
+  revealEls.forEach((el) => el.classList.add("in-view"));
+} else {
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+  revealEls.forEach((el) => io.observe(el));
+}
 
 refreshCostSummary();

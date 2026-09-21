@@ -61,13 +61,36 @@
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
+  position: relative;
+  overflow-x: hidden;
   background:
-    radial-gradient(ellipse 900px 480px at 50% -8%, color-mix(in srgb, var(--emerald) 12%, transparent), transparent 65%),
+    radial-gradient(ellipse 820px 480px at 18% -10%, color-mix(in srgb, var(--emerald) 16%, transparent), transparent 60%),
+    radial-gradient(ellipse 680px 460px at 88% 8%, color-mix(in srgb, var(--gold) 12%, transparent), transparent 55%),
+    radial-gradient(ellipse 600px 420px at 50% 115%, color-mix(in srgb, var(--copper) 8%, transparent), transparent 60%),
     var(--paper);
+  background-size: 200% 200%, 200% 200%, 200% 200%, 100% 100%;
+  animation: mesh-drift 26s ease-in-out infinite alternate;
   color: var(--ink);
   font-family: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
   line-height: 1.6;
 }
+@keyframes mesh-drift {
+  0% { background-position: 0% 0%, 100% 0%, 50% 100%, 0 0; }
+  100% { background-position: 25% 18%, 75% 25%, 40% 90%, 0 0; }
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (prefers-reduced-motion: reduce) {
+  body { animation: none; }
+}
+#app, #about { scroll-margin-top: 84px; }
 h1, h2, h3 {
   font-family: "Fraunces", Georgia, serif;
   font-weight: 500;
@@ -92,17 +115,44 @@ h1, h2, h3 {
 
 /* ---------- coin glyph ---------- */
 .coin {
+  position: relative;
   display: inline-block;
+  overflow: hidden;
   border-radius: 50%;
   background: radial-gradient(circle at 34% 28%, #f3dd9a, var(--gold) 55%, #7a5a18 100%);
   box-shadow: inset 0 0 0 2px rgba(0,0,0,0.18), inset 0 0 3px 1px rgba(255,255,255,0.35);
   flex-shrink: 0;
+}
+.coin::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.5) 48%, transparent 62%);
+  background-size: 220% 220%;
+  background-position: -120% -120%;
+  animation: coin-sheen 5.5s ease-in-out infinite;
+}
+@keyframes coin-sheen {
+  0%, 55% { background-position: -120% -120%; }
+  85%, 100% { background-position: 120% 120%; }
 }
 .coin-sm { width: 16px; height: 16px; }
 .coin-md { width: 38px; height: 38px; }
 .coin-lg { width: 46px; height: 46px; }
 .tier-card.copper .coin { background: radial-gradient(circle at 34% 28%, #e3a877, var(--copper) 55%, #5e3818 100%); }
 .tier-card.silver .coin { background: radial-gradient(circle at 34% 28%, #d3dee6, var(--silver) 55%, #2c3b47 100%); }
+
+.grad-text {
+  background: linear-gradient(100deg, var(--gold), var(--copper) 50%, var(--emerald));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coin::after { animation: none; }
+}
 
 /* ---------- nav ---------- */
 .site-nav {
@@ -191,14 +241,26 @@ h1, h2, h3 {
   gap: 20px;
 }
 .chat-pane {
-  background: var(--panel);
+  background: color-mix(in srgb, var(--panel) 74%, transparent);
+  backdrop-filter: blur(18px) saturate(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
   border: 1px solid var(--rule);
   border-radius: 16px;
-  box-shadow: var(--shadow);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 12%, transparent), var(--shadow);
   display: flex;
   flex-direction: column;
   height: 560px;
   overflow: hidden;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.in-view { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
 }
 .messages {
   flex: 1;
@@ -339,7 +401,11 @@ form.composer textarea {
   color: var(--ink);
   height: 44px;
 }
-form.composer textarea:focus { outline: 2px solid var(--emerald); outline-offset: 1px; }
+form.composer textarea:focus {
+  outline: none;
+  border-color: var(--emerald);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--emerald) 22%, transparent);
+}
 form.composer button {
   display: inline-flex;
   align-items: center;
@@ -365,15 +431,36 @@ form.composer button:disabled { opacity: 0.5; cursor: default; }
 /* ---------- vault ---------- */
 .vault { display: flex; flex-direction: column; gap: 16px; }
 .vault-card {
-  background: linear-gradient(160deg, var(--panel), var(--panel-2));
+  background: linear-gradient(160deg, color-mix(in srgb, var(--panel) 78%, transparent), color-mix(in srgb, var(--panel-2) 78%, transparent));
+  backdrop-filter: blur(18px) saturate(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
   border: 1px solid var(--rule);
   border-radius: 16px;
-  box-shadow: var(--shadow);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 12%, transparent), var(--shadow);
   padding: 20px;
   text-align: center;
   transition: box-shadow 0.4s ease;
 }
 .vault-card.pulse { box-shadow: 0 0 0 4px var(--gold-glow), var(--shadow); }
+.vault-figure { position: relative; }
+.spark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  pointer-events: none;
+  animation: spark-burst 0.9s ease-out forwards;
+}
+@keyframes spark-burst {
+  0% { transform: translate(-50%, -50%) scale(0.7); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spark { display: none; }
+}
 .vault-label {
   font-family: "IBM Plex Mono", monospace;
   font-size: 11px;
@@ -389,10 +476,13 @@ form.composer button:disabled { opacity: 0.5; cursor: default; }
 .vault-caption { font-size: 11.5px; color: var(--slate); margin: 10px 0 0; }
 
 .vault-section {
-  background: var(--panel);
+  background: color-mix(in srgb, var(--panel) 74%, transparent);
+  backdrop-filter: blur(18px) saturate(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
   border: 1px solid var(--rule);
   border-radius: 16px;
   padding: 18px 20px;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 10%, transparent);
 }
 .vault-section h2 {
   font-family: "IBM Plex Mono", monospace;
@@ -440,17 +530,41 @@ form.composer button:disabled { opacity: 0.5; cursor: default; }
 
 .tier-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .tier-card {
-  background: var(--panel);
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--panel) 74%, transparent);
+  backdrop-filter: blur(18px) saturate(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
   border: 1px solid var(--rule);
   border-top: 3px solid transparent;
   border-radius: 14px;
   padding: 22px 20px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition-property: transform, box-shadow, opacity;
+  transition-duration: 0.2s, 0.2s, 0.6s;
+  transition-timing-function: ease, ease, ease;
+  opacity: 0;
 }
-.tier-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.tier-card.in-view { opacity: 1; }
+.tier-cards .tier-card:nth-child(2) { transition-delay: 0s, 0s, 0.08s; }
+.tier-cards .tier-card:nth-child(3) { transition-delay: 0s, 0s, 0.16s; }
+.tier-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.22), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+.tier-card:hover { box-shadow: var(--shadow); }
+.tier-card:hover::after { opacity: 1; }
 .tier-card.copper { border-top-color: var(--copper); }
 .tier-card.silver { border-top-color: var(--silver); }
 .tier-card.gold { border-top-color: var(--gold); }
+@media (prefers-reduced-motion: reduce) {
+  .tier-card { opacity: 1; transform: none; }
+}
 .tier-card h3 { font-size: 18px; margin: 14px 0 8px; }
 .tier-card.copper h3 { color: var(--copper); }
 .tier-card.silver h3 { color: var(--silver); }

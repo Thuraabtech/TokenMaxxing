@@ -6,6 +6,10 @@ that can handle it gets called. See the architecture blueprint for the full
 design rationale (classifier approach, why OpenSearch Serverless is out,
 where TOON actually helps, budget breakdown).
 
+## Demo
+
+<video src="brag-output/brag.mp4" controls muted poster="brag-output/brag.jpg" width="100%"></video>
+
 ## Stack
 
 - **Backend**: FastAPI + LangGraph, raw `boto3` Bedrock Converse calls (for
